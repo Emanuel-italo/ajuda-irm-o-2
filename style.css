@@ -1,0 +1,33 @@
+body {
+  font-family: Arial, sans-serif;
+  max-width: 360px;
+  margin: 2rem auto;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+h2, h3 {
+  text-align: center;
+}
+
+input, button {
+  width: 100%;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+button {
+  cursor: pointer;
+}
+
+#history {
+  list-style: none;
+  padding: 0;
+}
+
+#history li {
+  border-bottom: 1px solid #eee;
+  padding: 0.5rem 0;
+}
