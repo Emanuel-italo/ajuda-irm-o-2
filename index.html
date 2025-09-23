@@ -1,34 +1,77 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>Diabetes Control</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <!-- Onboarding (aparece uma vez) -->
-  <div id="profile-section">
-    <h2>Configurar Perfil</h2>
-    <input id="age" type="number" placeholder="Idade" />
-    <input id="weight" type="number" placeholder="Peso (kg)" />
-    <input id="carbRatio" type="number" placeholder="Razão Insulina/Carb (ex:10)" />
-    <input id="sensitivity" type="number" placeholder="Fator Sensibilidade (ex:50)" />
-    <button id="save-profile">Salvar Perfil</button>
-  </div>
+<!doctype html>
+<option value="1">1 U</option>
+</select>
+</div>
+</div>
 
-  <!-- App Principal -->
-  <div id="app-section" hidden>
-    <h2>Registro de Refeição</h2>
-    <input id="glucose" type="number" placeholder="Glicemia (mg/dL)" />
-    <input id="carbs"   type="number" placeholder="Carboidratos (g)" />
-    <button id="calc-btn">Calcular Insulina</button>
-    <p id="result"></p>
 
-    <h3>Histórico</h3>
-    <ul id="history"></ul>
-  </div>
+<div style="display:flex;gap:.5rem">
+<button class="primary" id="save-profile">Salvar Perfil</button>
+<button id="reset-profile" class="danger">Resetar</button>
+</div>
+</section>
 
-  <script src="script.js"></script>
+
+<!-- App principal -->
+<main class="grid" style="margin-top:1rem">
+<div>
+<h2 style="margin:.25rem 0">Registro de Refeição</h2>
+<div class="row">
+<div>
+<label for="glucose">Glicemia (mg/dL)</label>
+<input id="glucose" type="number" min="0" step="1" />
+</div>
+<div>
+<label for="carbs">Carboidratos (g)</label>
+<input id="carbs" type="number" min="0" step="1" />
+</div>
+</div>
+<div style="display:flex;gap:.5rem;margin-top:.4rem">
+<button id="calc-btn" class="primary">Calcular Insulina</button>
+<button id="correction-only">Apenas Correção</button>
+</div>
+
+
+<div id="result" class="result" aria-live="polite" hidden>
+<div class="small muted">Resultado</div>
+<div style="font-size:1.1rem;font-weight:600;margin-top:.25rem" id="result-text">—</div>
+<div class="small muted" id="result-breakdown"></div>
+</div>
+
+
+<div class="disclaimer">Aviso: esta ferramenta é apenas auxiliar e não substitui orientação médica. Verifique com seu profissional de saúde antes de aplicar quaisquer doses.</div>
+</div>
+
+
+<section>
+<div style="display:flex;align-items:center;justify-content:space-between">
+<h3 style="margin:.25rem 0">Histórico</h3>
+<div class="actions">
+<button id="export-csv">Exportar CSV</button>
+<button id="clear-history" class="danger">Limpar</button>
+</div>
+</div>
+
+
+<div id="history">
+<!-- tabela gerada por JS -->
+</div>
+</section>
+
+
+<div aria-hidden="true" id="mini-chart" style="height:64px;margin-top:.5rem"></div>
+
+
+</main>
+
+
+<footer>
+<div class="muted">Dados salvos localmente no navegador</div>
+<div class="muted">Última atualização: <span id="last-update">—</span></div>
+</footer>
+</div>
+
+
+<script src="script.js"></script>
 </body>
 </html>
