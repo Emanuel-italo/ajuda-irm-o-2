@@ -1,77 +1,134 @@
 <!doctype html>
-<option value="1">1 U</option>
-</select>
-</div>
-</div>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Diabetes Helper — Demo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app container">
+    <header>
+      <h1>Diabetes Helper</h1>
+      <div class="header-actions">
+        <button id="edit-profile">Perfil</button>
+        <button id="export-csv">Exportar CSV</button>
+        <button id="clear-history">Limpar</button>
+      </div>
+    </header>
 
+    <!-- ONBOARDING / PROFILE -->
+    <section id="profile-card" class="card">
+      <h2>Onboarding / Perfil</h2>
+      <form id="profile-form" autocomplete="off">
+        <div class="row">
+          <label>Idade<input id="age" type="number" min="1"></label>
+          <label>Peso (kg)<input id="weight" type="number" step="0.1"></label>
+          <label>Altura (cm)<input id="height" type="number" step="0.1"></label>
+        </div>
+        <div class="row">
+          <label>Hemoglobina glicada (HbA1c %)<input id="hba1c" type="number" step="0.1"></label>
+          <label>Tipo de diabetes
+            <select id="diabetesType">
+              <option value="1">Tipo 1</option>
+              <option value="2">Tipo 2</option>
+            </select>
+          </label>
+          <label>Origem
+            <select id="diabetesOrigin">
+              <option value="hereditaria">Hereditária</option>
+              <option value="desenvolvida">Desenvolvida</option>
+            </select>
+          </label>
+        </div>
+        <div class="row">
+          <label>Insulina principal
+            <select id="insulinType">
+              <option>Rápida</option>
+              <option>Ultrarrápida</option>
+              <option>NPH</option>
+              <option>Basal</option>
+            </select>
+          </label>
+          <label>Meta glicêmica (mg/dL)<input id="target" type="number" step="1" value="100"></label>
+          <label>Insulina padrão<input type="text" value="Humalog" readonly></label>
+        </div>
+        <div class="row actions">
+          <button id="save-profile" type="button" class="primary">Salvar Perfil</button>
+          <button id="reset-profile" type="button" class="danger">Resetar</button>
+        </div>
+        <div id="profile-summary" class="muted"></div>
+      </form>
+    </section>
 
-<div style="display:flex;gap:.5rem">
-<button class="primary" id="save-profile">Salvar Perfil</button>
-<button id="reset-profile" class="danger">Resetar</button>
-</div>
-</section>
+    <!-- CHECK-IN DIÁRIO -->
+    <section id="checkin-card" class="card">
+      <h2>Check-in de Refeição</h2>
+      <form id="checkin-form" autocomplete="off">
+        <div class="row">
+          <label>Glicemia atual (mg/dL)<input id="glucose" type="number" step="1" required></label>
+          <label>Carboidratos (g)<input id="carbs" type="number" step="0.1" required></label>
+        </div>
+        <div class="row">
+          <label>Alimento (nome)<input id="food" list="foods" placeholder="ex: Pão"></label>
+          <datalist id="foods"></datalist>
+          <label><input id="correctionOnly" type="checkbox"> Apenas correção</label>
+        </div>
+        <div class="row">
+          <label id="unit-label" hidden>
+            Unidade
+            <input id="food-unit" type="text" placeholder="Ex: 1 fatia">
+          </label>
+        </div>
+        <div class="row actions">
+          <button id="calc-btn" class="primary" type="button">Calcular Insulina</button>
+          <button id="suggest-food" type="button">Sugestões</button>
+        </div>
+      </form>
 
+      <div id="result" class="result" aria-live="polite" hidden>
+        <div class="result-top">
+          <div class="big" id="dose-text">— U</div>
+          <div class="muted small" id="dose-detail">—</div>
+        </div>
+        <div id="alerts" class="alerts"></div>
+        <div id="food-suggestion" class="muted"></div>
+      </div>
+    </section>
 
-<!-- App principal -->
-<main class="grid" style="margin-top:1rem">
-<div>
-<h2 style="margin:.25rem 0">Registro de Refeição</h2>
-<div class="row">
-<div>
-<label for="glucose">Glicemia (mg/dL)</label>
-<input id="glucose" type="number" min="0" step="1" />
-</div>
-<div>
-<label for="carbs">Carboidratos (g)</label>
-<input id="carbs" type="number" min="0" step="1" />
-</div>
-</div>
-<div style="display:flex;gap:.5rem;margin-top:.4rem">
-<button id="calc-btn" class="primary">Calcular Insulina</button>
-<button id="correction-only">Apenas Correção</button>
-</div>
+    <!-- ASSISTÊNCIA CARBO + DB -->
+    <section id="carb-helper" class="card">
+      <h2>Assistente de Carboidratos</h2>
+      <div class="row">
+        <label>Pesquisar alimento<input id="search-food" placeholder="ex: arroz"></label>
+        <button id="search-btn" type="button">Pesquisar</button>
+      </div>
+      <div id="food-results" class="muted">Resultados aparecerão aqui.</div>
+    </section>
 
+    <!-- HISTÓRICO E GRÁFICO -->
+    <section id="history-card" class="card">
+      <h2>Histórico & Tendência</h2>
+      <canvas id="trend-canvas" height="80"></canvas>
+      <div id="history-list"></div>
+    </section>
 
-<div id="result" class="result" aria-live="polite" hidden>
-<div class="small muted">Resultado</div>
-<div style="font-size:1.1rem;font-weight:600;margin-top:.25rem" id="result-text">—</div>
-<div class="small muted" id="result-breakdown"></div>
-</div>
+    <!-- CONVERSA / PERGUNTAS MODELO -->
+    <section id="qa-card" class="card">
+      <h2>Perguntas Modeladas</h2>
+      <div class="qa-buttons">
+        <button class="qa" data-q="Minha glicose está em 150 mg/dL e comi 45 g de arroz">Ex.: glicose 150 + 45g arroz</button>
+        <button class="qa" data-q="Antes do almoço medi 90 mg/dL, comi salada e 30 g de batata-doce">Ex.: 90 + 30g batata-doce</button>
+        <button class="qa" data-q="Se minha glicose estiver em 65 mg/dL, devo comer o quê antes de uma refeição?">Ex.: hipo (65)</button>
+      </div>
+      <div id="qa-response" class="muted">Resposta rápida aparecerá aqui.</div>
+    </section>
 
+    <footer>
+      <div class="muted">Dados locais — demo sem servidor</div>
+    </footer>
+  </div>
 
-<div class="disclaimer">Aviso: esta ferramenta é apenas auxiliar e não substitui orientação médica. Verifique com seu profissional de saúde antes de aplicar quaisquer doses.</div>
-</div>
-
-
-<section>
-<div style="display:flex;align-items:center;justify-content:space-between">
-<h3 style="margin:.25rem 0">Histórico</h3>
-<div class="actions">
-<button id="export-csv">Exportar CSV</button>
-<button id="clear-history" class="danger">Limpar</button>
-</div>
-</div>
-
-
-<div id="history">
-<!-- tabela gerada por JS -->
-</div>
-</section>
-
-
-<div aria-hidden="true" id="mini-chart" style="height:64px;margin-top:.5rem"></div>
-
-
-</main>
-
-
-<footer>
-<div class="muted">Dados salvos localmente no navegador</div>
-<div class="muted">Última atualização: <span id="last-update">—</span></div>
-</footer>
-</div>
-
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
