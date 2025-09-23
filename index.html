@@ -7,6 +7,17 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+  <!-- Preloader -->
+  <div id="loading-screen">
+    <div class="spinner"></div>
+    <div class="loading-text">Carregando...</div>
+    <div class="loading-msg">
+      Aguarde um instante enquanto preparamos tudo para você!
+    </div>
+  </div>
+
+  <!-- Conteúdo da aplicação -->
   <div class="app container">
     <header>
       <h1>Diabetes Helper</h1>
@@ -17,7 +28,6 @@
       </div>
     </header>
 
-    <!-- ONBOARDING / PROFILE -->
     <section id="profile-card" class="card">
       <h2>Onboarding / Perfil</h2>
       <form id="profile-form" autocomplete="off">
@@ -61,7 +71,6 @@
       </form>
     </section>
 
-    <!-- CHECK-IN DIÁRIO -->
     <section id="checkin-card" class="card">
       <h2>Check-in de Refeição</h2>
       <form id="checkin-form" autocomplete="off">
@@ -70,7 +79,7 @@
           <label>Carboidratos (g)<input id="carbs" type="number" step="0.1" required></label>
         </div>
         <div class="row">
-          <label>Alimento (nome)<input id="food" list="foods" placeholder="ex: Pão"></label>
+          <label>Alimento (nome)<input id="food" list="foods" placeholder="ex: Pão branco (1 fatia)"></label>
           <datalist id="foods"></datalist>
           <label><input id="correctionOnly" type="checkbox"> Apenas correção</label>
         </div>
@@ -85,7 +94,6 @@
           <button id="suggest-food" type="button">Sugestões</button>
         </div>
       </form>
-
       <div id="result" class="result" aria-live="polite" hidden>
         <div class="result-top">
           <div class="big" id="dose-text">— U</div>
@@ -96,7 +104,6 @@
       </div>
     </section>
 
-    <!-- ASSISTÊNCIA CARBO + DB -->
     <section id="carb-helper" class="card">
       <h2>Assistente de Carboidratos</h2>
       <div class="row">
@@ -106,20 +113,24 @@
       <div id="food-results" class="muted">Resultados aparecerão aqui.</div>
     </section>
 
-    <!-- HISTÓRICO E GRÁFICO -->
     <section id="history-card" class="card">
       <h2>Histórico & Tendência</h2>
       <canvas id="trend-canvas" height="80"></canvas>
       <div id="history-list"></div>
     </section>
 
-    <!-- CONVERSA / PERGUNTAS MODELO -->
     <section id="qa-card" class="card">
       <h2>Perguntas Modeladas</h2>
       <div class="qa-buttons">
-        <button class="qa" data-q="Minha glicose está em 150 mg/dL e comi 45 g de arroz">Ex.: glicose 150 + 45g arroz</button>
-        <button class="qa" data-q="Antes do almoço medi 90 mg/dL, comi salada e 30 g de batata-doce">Ex.: 90 + 30g batata-doce</button>
-        <button class="qa" data-q="Se minha glicose estiver em 65 mg/dL, devo comer o quê antes de uma refeição?">Ex.: hipo (65)</button>
+        <button class="qa" data-q="Minha glicose está em 150 mg/dL e comi 45 g de arroz">
+          Ex.: glicose 150 + 45g arroz
+        </button>
+        <button class="qa" data-q="Antes do almoço medi 90 mg/dL, comi salada e 30 g de batata-doce">
+          Ex.: 90 + 30g batata-doce
+        </button>
+        <button class="qa" data-q="Se minha glicose estiver em 65 mg/dL, devo comer o quê antes de uma refeição?">
+          Ex.: hipo (65)
+        </button>
       </div>
       <div id="qa-response" class="muted">Resposta rápida aparecerá aqui.</div>
     </section>
@@ -128,6 +139,16 @@
       <div class="muted">Dados locais — demo sem servidor</div>
     </footer>
   </div>
+
+  <!-- Mantém o preloader na tela por 60s e depois oculta apenas ele -->
+  <script>
+    window.addEventListener('load', () => {
+      const loader = document.getElementById('loading-screen');
+      setTimeout(() => {
+        loader.classList.add('hidden');
+      }, 60000); // 60000ms = 1 minuto
+    });
+  </script>
 
   <script src="script.js"></script>
 </body>

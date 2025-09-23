@@ -1,33 +1,54 @@
 'use strict';
 
+// --------------------------------------------------------------------------------------------------
+// LÓGICA DE VISUALIZAÇÃO DE TELA (PRELOADER)
+// --------------------------------------------------------------------------------------------------
+document.addEventListener('DOMContentLoaded', function() {
+  const loadingScreen = document.getElementById('loading-screen');
+
+  // Adiciona a classe 'hidden' quando a página estiver totalmente carregada
+  window.addEventListener('load', function() {
+    loadingScreen.classList.add('hidden');
+  });
+
+  // Remove o elemento do DOM completamente após a transição de opacidade
+  loadingScreen.addEventListener('transitionend', function() {
+    loadingScreen.style.display = 'none';
+  });
+});
+
+// --------------------------------------------------------------------------------------------------
+// CÓDIGO DA APLICAÇÃO DIABETES HELPER
+// --------------------------------------------------------------------------------------------------
+
 // chaves de armazenamento
 const PROFILE_KEY = 'dh_profile_v1';
 const HISTORY_KEY = 'dh_history_v1';
 
 // constantes Humalog
-const HUMALOG_ICR      = 10;   // g de carbo por U
-const HUMALOG_CF       = 50;   // mg/dL reduzido por U
-const HUMALOG_ROUNDING = 0.5;  // arredondamento em U
+const HUMALOG_ICR      = 10;   // g de carbo por U
+const HUMALOG_CF       = 50;   // mg/dL reduzido por U
+const HUMALOG_ROUNDING = 0.5;  // arredondamento em U
 
 // base local de alimentos
 const FOOD_DB = [
-  { name: 'Pão branco (1 fatia)',             carbs: 15, ig: 70, subs: ['Pão integral'] },
-  { name: 'Arroz cozido (100g)',              carbs: 28, ig: 70, subs: ['Arroz integral'] },
-  { name: 'Batata-doce (100g)',               carbs: 20, ig: 50, subs: ['Legumes'] },
-  { name: 'Maçã média',                       carbs: 20, ig: 40, subs: ['Pera'] },
-  { name: 'Banana média',                     carbs: 27, ig: 60, subs: ['Maçã'] },
-  { name: 'Leite (200ml)',                    carbs: 10, ig: 30, subs: ['Iogurte natural'] },
-  { name: 'Açúcar (1 col. sopa)',             carbs: 12, ig:100, subs: ['Fruta'] },
-  { name: 'Pão de manhã (1 fatia)',           carbs: 15, ig: 70, subs: ['Pão integral'] },
-  { name: 'Café puro com açúcar (200ml)',     carbs: 12, ig: 65, subs: ['Café sem açúcar'] },
-  { name: 'Feijão cozido (100g)',             carbs:  8, ig: 30, subs: ['Feijão integral'] },
-  { name: 'Torrada (1 unidade)',              carbs: 12, ig: 70, subs: ['Pão integral torrado'] },
-  { name: 'Frango grelhado (100g)',           carbs:  0, ig:  0, subs: ['Peixe grelhado'] },
-  { name: 'Carne bovina (100g)',              carbs:  0, ig:  0, subs: ['Carne magra'] },
-  { name: 'Batata cozida (100g)',             carbs: 20, ig: 50, subs: ['Batata-doce'] },
-  { name: 'Bolacha Club Social (3 unid.)',    carbs: 15, ig: 70, subs: ['Bolacha integral'] },
-  { name: 'Risole (1 unid.)',                 carbs: 20, ig: 75, subs: ['Salgado assado'] },
-  { name: 'Coxinha (1 unid. média)',          carbs: 30, ig: 80, subs: ['Coxinha de forno'] },
+  { name: 'Pão branco (1 fatia)',             carbs: 15, ig: 70, subs: ['Pão integral'] },
+  { name: 'Arroz cozido (100g)',              carbs: 28, ig: 70, subs: ['Arroz integral'] },
+  { name: 'Batata-doce (100g)',               carbs: 20, ig: 50, subs: ['Legumes'] },
+  { name: 'Maçã média',                       carbs: 20, ig: 40, subs: ['Pera'] },
+  { name: 'Banana média',                     carbs: 27, ig: 60, subs: ['Maçã'] },
+  { name: 'Leite (200ml)',                    carbs: 10, ig: 30, subs: ['Iogurte natural'] },
+  { name: 'Açúcar (1 col. sopa)',             carbs: 12, ig:100, subs: ['Fruta'] },
+  { name: 'Pão de manhã (1 fatia)',           carbs: 15, ig: 70, subs: ['Pão integral'] },
+  { name: 'Café puro com açúcar (200ml)',     carbs: 12, ig: 65, subs: ['Café sem açúcar'] },
+  { name: 'Feijão cozido (100g)',             carbs:  8, ig: 30, subs: ['Feijão integral'] },
+  { name: 'Torrada (1 unidade)',              carbs: 12, ig: 70, subs: ['Pão integral torrado'] },
+  { name: 'Frango grelhado (100g)',           carbs:  0, ig:  0, subs: ['Peixe grelhado'] },
+  { name: 'Carne bovina (100g)',              carbs:  0, ig:  0, subs: ['Carne magra'] },
+  { name: 'Batata cozida (100g)',             carbs: 20, ig: 50, subs: ['Batata-doce'] },
+  { name: 'Bolacha Club Social (3 unid.)',    carbs: 15, ig: 70, subs: ['Bolacha integral'] },
+  { name: 'Risole (1 unid.)',                 carbs: 20, ig: 75, subs: ['Salgado assado'] },
+  { name: 'Coxinha (1 unid. média)',          carbs: 30, ig: 80, subs: ['Coxinha de forno'] },
   { name: 'Pizza frango e catupiry (1 fatia)',carbs: 30, ig: 70, subs: ['Pizza integral'] }
 ];
 
@@ -100,13 +121,13 @@ function showProfileSummary(){
 }
 function populateProfileForm(){
   if(!profile) return;
-  els.age.value         = profile.age || '';
-  els.weight.value      = profile.weight || '';
-  els.height.value      = profile.height || '';
-  els.hba1c.value       = profile.hba1c || '';
-  els.diabetesType.value   = profile.diabetesType || '2';
+  els.age.value         = profile.age || '';
+  els.weight.value      = profile.weight || '';
+  els.height.value      = profile.height || '';
+  els.hba1c.value       = profile.hba1c || '';
+  els.diabetesType.value   = profile.diabetesType || '2';
   els.diabetesOrigin.value = profile.diabetesOrigin || 'desenvolvida';
-  els.target.value      = profile.target || 100;
+  els.target.value      = profile.target || 100;
   showProfileSummary();
 }
 populateProfileForm();
@@ -146,8 +167,8 @@ function calculateInsulin({ glucose, carbs, correctionOnly = false }){
   if(!profile) throw new Error('Perfil não configurado');
   const doseMeal = correctionOnly ? 0 : (carbs / HUMALOG_ICR);
   const doseCorr = glucose > profile.target
-                   ? (glucose - profile.target) / HUMALOG_CF
-                   : 0;
+    ? (glucose - profile.target) / HUMALOG_CF
+    : 0;
   const raw = doseMeal + doseCorr;
   const rounded = Number(roundTo(raw, HUMALOG_ROUNDING).toFixed(2));
   return {
@@ -181,7 +202,7 @@ function suggestFoodForBG(g){
 // ação de calcular
 function onCalculate({ correctionOnly = false } = {}){
   const glucose = toNum(els.glucose.value);
-  const carbs   = toNum(els.carbs.value);
+  const carbs   = toNum(els.carbs.value);
   if(isNaN(glucose) || isNaN(carbs)){
     alert('Preencha glicemia e carboidratos.');
     return;
@@ -196,7 +217,7 @@ function onCalculate({ correctionOnly = false } = {}){
   }
 
   const res = calculateInsulin({ glucose, carbs, correctionOnly });
-  els.doseText.textContent   = `${res.insulin} U`;
+  els.doseText.textContent   = `${res.insulin} U`;
   els.doseDetail.textContent = `Refeição ${res.doseMeal} U • Correção ${res.doseCorr} U • bruto ${res.raw} U`;
   els.resultBox.hidden = false;
 
@@ -311,7 +332,7 @@ function renderTrend(){
   if(!data.length) return;
   const vals = data.map(d => d.glucose);
   const max = Math.max(...vals, 300), min = Math.min(...vals, 40);
-  const pad  = 10, stepX = (w - pad*2) / (vals.length - 1 || 1);
+  const pad  = 10, stepX = (w - pad*2) / (vals.length - 1 || 1);
   ctx.lineWidth = 2; ctx.strokeStyle = '#06b6d4'; ctx.beginPath();
   vals.forEach((v, i) => {
     const x = pad + i * stepX;
@@ -332,9 +353,9 @@ els.exportCsv.addEventListener('click', ()=>{
   ];
   const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
   const blob = new Blob([csv], { type: 'text/csv' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href     = url;
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
   a.download = 'historico.csv';
   a.click();
   URL.revokeObjectURL(url);
